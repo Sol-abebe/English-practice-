@@ -1,0 +1,850 @@
+By Dr Solomon (MD, MPH/ RH )
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grammar Quest 3D - Fun English Grammar Learning</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #311042 100%);
+      min-height: 100vh;
+      color: #f8fafc;
+      overflow-x: hidden;
+      perspective: 1200px;
+    }
+
+    h1, h2, h3, .font-fun {
+      font-family: 'Fredoka', cursive;
+    }
+
+    /* 3D Glassmorphism Cards */
+    .glass-card-3d {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    }
+
+    .glass-card-3d:hover {
+      transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 30px 60px rgba(124, 58, 237, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    /* Category Interactive Card */
+    .cat-card {
+      transform-style: preserve-3d;
+      transition: all 0.3s ease;
+    }
+    .cat-card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    /* Option Button Styles */
+    .option-btn {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-3px) translateZ(10px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+    }
+    .option-btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    /* Floating Animated Objects background */
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+      animation: floatAround 18s infinite ease-in-out alternate;
+    }
+
+    @keyframes floatAround {
+      0% { transform: translateY(0) rotate(0deg) scale(1); }
+      50% { transform: translateY(-40px) rotate(180deg) scale(1.1); }
+      100% { transform: translateY(20px) rotate(360deg) scale(0.95); }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.5);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.8);
+    }
+
+    /* Streak & Badge Glow Effects */
+    .glow-orange {
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+    }
+    .glow-purple {
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+    }
+    .glow-green {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+    }
+
+    /* Animated Pulse for Timer */
+    @keyframes pulseWarning {
+      0%, 100% { color: #ef4444; transform: scale(1); }
+      50% { color: #f87171; transform: scale(1.1); }
+    }
+    .timer-warning {
+      animation: pulseWarning 0.8s infinite;
+    }
+  </style>
+</head>
+<body class="p-3 md:p-6 flex flex-col justify-between min-h-screen relative overflow-x-hidden">
+
+  <!-- Background Animated Shapes -->
+  <div class="floating-shape w-72 h-72 top-10 left-[-50px] bg-purple-500/10"></div>
+  <div class="floating-shape w-96 h-96 bottom-10 right-[-100px] bg-pink-500/10" style="animation-delay: -5s;"></div>
+  <div class="floating-shape w-60 h-60 top-1/2 left-1/3 bg-blue-500/10" style="animation-delay: -9s;"></div>
+
+  <!-- Header Navigation -->
+  <header class="max-w-6xl mx-auto w-full flex flex-wrap justify-between items-center gap-4 mb-6 z-10">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="app.goHome()">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center text-2xl text-white shadow-lg shadow-purple-500/40 transform rotate-3 hover:rotate-0 transition-all">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-amber-300 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">
+          GrammarQuest 3D
+        </h1>
+        <p class="text-xs text-purple-200/80 font-semibold tracking-wider uppercase">Interactive Kid's Grammar Arena</p>
+      </div>
+    </div>
+
+    <!-- Quick Stats & Controls Header Controls -->
+    <div class="flex items-center gap-3">
+      <!-- Audio Sound Toggle -->
+      <button id="soundToggleBtn" onclick="app.toggleSound()" class="px-3.5 py-2.5 rounded-xl glass-card-3d flex items-center gap-2 hover:bg-white/15 transition-all text-sm font-semibold text-amber-300">
+        <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+        <span class="hidden sm:inline">Sound</span>
+      </button>
+
+      <!-- Streak Box -->
+      <div class="px-4 py-2 rounded-xl glass-card-3d flex items-center gap-2 glow-orange">
+        <i class="fa-solid fa-fire text-orange-400 text-lg animate-bounce"></i>
+        <span id="streakDisplay" class="font-bold text-amber-300 text-base">0</span>
+        <span class="text-xs text-orange-200 uppercase font-bold hidden sm:inline">Streak</span>
+      </div>
+
+      <!-- Home Button -->
+      <button onclick="app.goHome()" class="px-4 py-2.5 rounded-xl bg-violet-600/60 hover:bg-violet-600 border border-violet-400/30 text-white text-sm font-bold transition-all flex items-center gap-2">
+        <i class="fa-solid fa-house"></i>
+        <span class="hidden sm:inline">Topics</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Dynamic View Container -->
+  <main id="appContainer" class="max-w-5xl mx-auto w-full flex-grow flex flex-col justify-center my-2 z-10">
+    <!-- Screen content dynamically injected via JS -->
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-5xl mx-auto w-full text-center py-4 text-xs text-slate-400/80 z-10 border-t border-white/10 mt-6">
+    <p>🚀 Powered by GrammarQuest 3D • Practice makes perfect! • Designed for Smart Learning</p>
+  </footer>
+
+  <!-- Application JS Engine -->
+  <script>
+    // --- AUDIO SYNTHESIZER (Web Audio API) ---
+    class AudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playCorrect() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
+        osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.35); // C6
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      }
+      playWrong() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now); // A3
+        osc.frequency.linearRampToValueAtTime(130, now + 0.3); // C3
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      }
+      playClick() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      }
+    }
+
+    const soundFX = new AudioEngine();
+
+    // --- QUIZ DATA SETS FROM WORKSHEETS ---
+    const quizCategories = [
+      {
+        id: 'pos-adj',
+        title: 'Possessive Adjectives',
+        subtitle: 'Part 3 Worksheet',
+        icon: 'fa-user-tag',
+        color: 'from-amber-400 to-orange-500',
+        questions: [
+          { q: 'David always keeps ___ desk clean and organized.', options: ['a) his', 'b) her', 'c) their', 'd) your'], answer: 0, exp: 'David is a singular male, so we use "his".' },
+          { q: 'The computer lost ___ connection to the Wi-Fi network.', options: ['a) his', 'b) its', 'c) their', 'd) her'], answer: 1, exp: 'Computer is a singular object (non-human), so we use "its".' },
+          { q: 'I am taking ___ dog for a walk in the park.', options: ['a) your', 'b) his', 'c) my', 'd) their'], answer: 2, exp: 'The subject is "I", which pairs with possessive "my".' },
+          { q: 'The players celebrated ___ victory after winning the championship.', options: ['a) her', 'b) his', 'c) its', 'd) their'], answer: 3, exp: '"Players" is plural (they), so the possessive is "their".' },
+          { q: 'Sophie brushed ___ long brown hair before the party.', options: ['a) her', 'b) his', 'c) our', 'd) their'], answer: 0, exp: 'Sophie is singular female, so we use "her".' },
+          { q: 'You should check ___ email for the confirmation message.', options: ['a) my', 'b) your', 'c) their', 'd) her'], answer: 1, exp: 'The pronoun "You" corresponds to "your".' },
+          { q: 'We invited all of ___ neighbors to the weekend barbeque.', options: ['a) your', 'b) their', 'c) our', 'd) my'], answer: 2, exp: 'The subject "We" pairs with "our".' },
+          { q: 'The store changed ___ opening hours for the holiday season.', options: ['a) his', 'b) her', 'c) their', 'd) its'], answer: 3, exp: 'Store is a single business entity/object, so we use "its".' },
+          { q: 'My sister and I packed ___ suitcases for the vacation.', options: ['a) our', 'b) their', 'c) your', 'd) her'], answer: 0, exp: '"My sister and I" means "we", so we use "our".' },
+          { q: 'Alex forgot ___ umbrella, so he got wet in the rain.', options: ['a) her', 'b) your', 'c) his', 'd) their'], answer: 2, exp: 'Alex is referred to as "he", so the possessive adjective is "his".' },
+          { q: 'Have you finished writing ___ essay for English class?', options: ['a) my', 'b) her', 'c) our', 'd) your'], answer: 3, exp: 'Addressing "you" requires "your".' },
+          { q: 'The birds are feeding ___ chicks in the nest.', options: ['a) its', 'b) his', 'c) their', 'd) her'], answer: 2, exp: '"Birds" is plural, so we use "their".' }
+        ]
+      },
+      {
+        id: 'articles',
+        title: 'Articles (A, An, The, -)',
+        subtitle: 'Set 15 Worksheet',
+        icon: 'fa-font',
+        color: 'from-emerald-400 to-teal-600',
+        questions: [
+          { q: 'She wants to be ___ engineer when she finishes university.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 1, exp: '"Engineer" begins with a vowel sound /e/, so we use "an".' },
+          { q: 'I saw ___ interesting documentary on television last night.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 1, exp: '"Interesting" starts with a vowel sound /i/, requiring "an".' },
+          { q: 'Paris is ___ capital city of France.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 2, exp: 'France has only one capital, making it specific: "the capital".' },
+          { q: 'Lions are wild animals that live in ___ Africa.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 3, exp: 'We do not use articles before names of continents like Africa.' },
+          { q: 'Could you please pass me ___ salt from across the table?', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 2, exp: 'Refers to the specific container of salt on the table.' },
+          { q: 'My brother plays ___ guitar in a local band on weekends.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 2, exp: 'We use "the" when talking about playing musical instruments.' },
+          { q: 'Breakfast is usually considered ___ most important meal of the day.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 2, exp: 'Superlatives ("most important") take the article "the".' },
+          { q: 'He goes to ___ work by subway every single morning.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 3, exp: 'Fixed expression: "go to work" doesn\'t take an article.' },
+          { q: 'She bought ___ new red jacket and a pair of boots.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 0, exp: '"New" starts with a consonant sound /n/, so we use "a".' },
+          { q: 'Mount Everest is ___ highest peak in the world.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 2, exp: 'Superlative adjective "highest" requires "the".' },
+          { q: 'We had ___ wonderful time at the beach party yesterday.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 0, exp: 'Common phrase: "have a wonderful time".' },
+          { q: 'She usually drinks ___ cup of coffee every morning.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 0, exp: '"Cup" is a singular countable noun starting with consonant sound /k/.' },
+          { q: 'The moon moves slowly around ___ Earth every month.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 2, exp: 'Unique natural objects like the Earth take "the".' },
+          { q: 'My uncle is ___ honest man who always tells the truth.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 1, exp: '"Honest" has a silent "h", so it starts with a vowel sound /o/ -> "an".' },
+          { q: 'Children often learn to swim at ___ very early age.', options: ['a) a', 'b) an', 'c) the', 'd) -'], answer: 0, exp: 'Standard phrase: "at a very early age".' }
+        ]
+      },
+      {
+        id: 'questions',
+        title: 'Question Words',
+        subtitle: 'Wh- Questions Quiz',
+        icon: 'fa-circle-question',
+        color: 'from-cyan-400 to-blue-600',
+        questions: [
+          { q: '___ did you buy your new red backpack? At the mall downtown?', options: ['A) When', 'B) Where', 'C) Who', 'D) Why'], answer: 1, exp: '"Where" asks about place/location ("At the mall").' },
+          { q: '___ is your favorite season of the year, summer or winter?', options: ['A) What', 'B) Which', 'C) Who', 'D) How'], answer: 1, exp: '"Which" is used when choosing between specific options.' },
+          { q: '___ did the children look so happy when they opened the box?', options: ['A) Where', 'B) How', 'C) Why', 'D) When'], answer: 2, exp: '"Why" asks for reasons or explanations.' },
+          { q: '___ plays the piano in your school band during the morning assembly?', options: ['A) Who', 'B) Whose', 'C) What', 'D) Where'], answer: 0, exp: '"Who" asks about a person.' },
+          { q: '___ does the English reading class start on Thursday mornings?', options: ['A) What time', 'B) How long', 'C) How often', 'D) How much'], answer: 0, exp: '"What time" asks for specific clock times.' },
+          { q: '___ bicycle is parked outside near the school gate? Is it yours?', options: ['A) Who', 'B) Which', 'C) Whose', 'D) What'], answer: 2, exp: '"Whose" asks about ownership or possession.' },
+          { q: '___ do you visit your grandparents who live in the countryside? Every weekend?', options: ['A) How much', 'B) How long', 'C) How often', 'D) How many'], answer: 2, exp: '"How often" asks about frequency.' },
+          { q: '___ did you make this delicious chocolate cake for the class party?', options: ['A) How', 'B) Where', 'C) When', 'D) Who'], answer: 0, exp: '"How" asks about method, manner, or process.' },
+          { q: '___ books do you have inside your school locker right now?', options: ['A) How much', 'B) How many', 'C) How long', 'D) How often'], answer: 1, exp: '"How many" is used for countable nouns like "books".' },
+          { q: '___ does it take to walk from your house to the public library?', options: ['A) How far', 'B) How long', 'C) How many', 'D) How much'], answer: 1, exp: '"How long" asks about length of time/duration.' },
+          { q: '___ do you usually go to school in the morning, by bus or on foot?', options: ['A) How', 'B) What', 'C) Where', 'D) Why'], answer: 0, exp: '"How" asks about mode of transportation.' },
+          { q: '___ did the science teacher announce the final project deadline? Yesterday or today?', options: ['A) Where', 'B) Why', 'C) Who', 'D) When'], answer: 3, exp: '"When" asks about time or date.' }
+        ]
+      },
+      {
+        id: 'conjunctions',
+        title: 'Conjunctions & Prepositions',
+        subtitle: 'Connecting Sentences',
+        icon: 'fa-link',
+        color: 'from-fuchsia-500 to-pink-600',
+        questions: [
+          { q: 'She wanted to buy the dress, ___ it was too expensive.', options: ['A) and', 'B) but', 'C) so', 'D) for'], answer: 1, exp: '"But" shows contrast between wanting the dress and its cost.' },
+          { q: 'You can have tea ___ you can have coffee; it is entirely up to you.', options: ['A) but', 'B) or', 'C) so', 'D) for'], answer: 1, exp: '"Or" presents a choice between two possibilities.' },
+          { q: 'He studied hard for the exam, ___ he got the highest grade in the class.', options: ['A) but', 'B) or', 'C) so', 'D) for'], answer: 2, exp: '"So" shows result/consequence of studying hard.' },
+          { q: 'I went to the grocery store ___ buy some fresh fruit and vegetables.', options: ['A) and', 'B) so', 'C) to', 'D) for'], answer: 2, exp: '"To" introduces the purpose of going to the store.' },
+          { q: 'The weather was cold ___ windy, so we decided to stay indoors.', options: ['A) and', 'B) but', 'C) or', 'D) so'], answer: 0, exp: '"And" connects similar descriptive qualities.' },
+          { q: 'She didn’t hear the phone ring ___ she was listening to loud music.', options: ['A) but', 'B) or', 'C) for', 'D) so'], answer: 2, exp: '"For" means "because" here, giving the reason.' },
+          { q: 'Would you prefer to stay at home ___ go out for dinner tonight?', options: ['A) and', 'B) but', 'C) or', 'D) so'], answer: 2, exp: '"Or" gives options in a question.' },
+          { q: 'He saved his money ___ he wanted to buy a new bicycle.', options: ['A) and', 'B) for', 'C) so', 'D) but'], answer: 1, exp: '"For" acts as a conjunction meaning "because".' },
+          { q: 'The project was difficult, ___ they managed to finish it on time.', options: ['A) and', 'B) but', 'C) or', 'D) to'], answer: 1, exp: '"But" shows an unexpected contrast.' },
+          { q: 'I need to go to the post office ___ mail this package.', options: ['A) and', 'B) to', 'C) for', 'D) so'], answer: 1, exp: '"To" express purpose (infinitive of purpose).' },
+          { q: 'She packed her umbrella ___ it looked like it was going to rain.', options: ['A) and', 'B) but', 'C) for', 'D) so'], answer: 2, exp: '"For" connects the action to its reason.' },
+          { q: 'He loves playing tennis ___ he also enjoys swimming on weekends.', options: ['A) and', 'B) but', 'C) or', 'D) so'], answer: 0, exp: '"And" joins two additional facts/interests.' }
+        ]
+      },
+      {
+        id: 'am-is-are',
+        title: 'Am, Is or Are',
+        subtitle: 'Verb To Be Practice',
+        icon: 'fa-cube',
+        color: 'from-purple-500 to-indigo-600',
+        questions: [
+          { q: 'I ___ a student.', options: ['A) am', 'B) is', 'C) are'], answer: 0, exp: 'Subject "I" always takes "am".' },
+          { q: 'She ___ my best friend.', options: ['A) am', 'B) is', 'C) are'], answer: 1, exp: 'Singular third-person pronoun "She" takes "is".' },
+          { q: 'They ___ playing football in the park.', options: ['A) am', 'B) is', 'C) are'], answer: 2, exp: 'Plural pronoun "They" takes "are".' },
+          { q: 'You ___ very kind.', options: ['A) am', 'B) is', 'C) are'], answer: 2, exp: 'Pronoun "You" always uses "are".' },
+          { q: 'He ___ a doctor at the local hospital.', options: ['A) am', 'B) is', 'C) are'], answer: 1, exp: 'Singular pronoun "He" takes "is".' },
+          { q: 'We ___ excited about the trip tomorrow.', options: ['A) am', 'B) is', 'C) are'], answer: 2, exp: 'Plural pronoun "We" takes "are".' },
+          { q: 'The cat ___ sleeping on the couch.', options: ['A) am', 'B) is', 'C) are'], answer: 1, exp: '"The cat" is singular (it), taking "is".' },
+          { q: 'The books ___ on the bookshelf.', options: ['A) am', 'B) is', 'C) are'], answer: 2, exp: '"The books" is plural (they), taking "are".' },
+          { q: 'My brother and I ___ going to the store.', options: ['A) am', 'B) is', 'C) are'], answer: 2, exp: '"My brother and I" equals "We" (plural), taking "are".' },
+          { q: 'It ___ a sunny day outside.', options: ['A) am', 'B) is', 'C) are'], answer: 1, exp: '"It" takes singular "is".' },
+          { q: 'Where ___ your keys?', options: ['A) am', 'B) is', 'C) are'], answer: 2, exp: '"Keys" is plural, requiring "are".' },
+          { q: 'I ___ happy to help you.', options: ['A) am', 'B) is', 'C) are'], answer: 0, exp: 'Subject "I" pairs with "am".' }
+        ]
+      },
+      {
+        id: 'prep-in-on-at',
+        title: 'Prepositions (in, on, at)',
+        subtitle: 'Dependent Prepositions Quiz',
+        icon: 'fa-compass',
+        color: 'from-rose-500 to-red-600',
+        questions: [
+          { q: 'She is very good ___ playing the piano.', options: ['A) in', 'B) on', 'C) at'], answer: 2, exp: 'We say "good at" an activity or skill.' },
+          { q: 'Are you interested ___ learning new languages?', options: ['A) in', 'B) on', 'C) at'], answer: 0, exp: 'The adjective "interested" takes the preposition "in".' },
+          { q: 'He insists ___ paying for the entire meal.', options: ['A) in', 'B) on', 'C) at'], answer: 1, exp: 'The verb "insist" is followed by "on".' },
+          { q: 'My brother is terrible ___ organizing his desk.', options: ['A) in', 'B) on', 'C) at'], answer: 2, exp: 'We say "terrible at" doing something.' },
+          { q: 'She succeeded ___ passing all of her final exams.', options: ['A) in', 'B) on', 'C) at'], answer: 0, exp: 'The verb "succeed" takes "in".' },
+          { q: 'The design depends ___ how much space you have.', options: ['A) in', 'B) on', 'C) at'], answer: 1, exp: '"Depend" is always followed by "on".' },
+          { q: 'They took great pride ___ their work.', options: ['A) in', 'B) on', 'C) at'], answer: 0, exp: 'Expression: "take pride in" something.' },
+          { q: 'You can always count ___ her to help you out.', options: ['A) in', 'B) on', 'C) at'], answer: 1, exp: 'Phrasal verb: "count on" someone.' },
+          { q: 'He is hopeless ___ remembering people’s names.', options: ['A) in', 'B) on', 'C) at'], answer: 2, exp: 'We say "hopeless at" an ability.' },
+          { q: 'The teacher believes ___ letting students work in pairs.', options: ['A) in', 'B) on', 'C) at'], answer: 0, exp: 'Verb phrase: "believe in" doing something.' },
+          { q: 'She spent a lot of money ___ new equipment.', options: ['A) in', 'B) on', 'C) at'], answer: 1, exp: 'We say "spend money on" things.' },
+          { q: 'I was completely ___ awe of the magnificent view.', options: ['A) in', 'B) on', 'C) at'], answer: 0, exp: 'Fixed idiom: "in awe of".' }
+        ]
+      },
+      {
+        id: 'adverbs-manner',
+        title: 'Adverbs of Manner',
+        subtitle: 'How Actions Are Done',
+        icon: 'fa-bolt',
+        color: 'from-amber-500 to-yellow-500',
+        questions: [
+          { q: 'Complete the sentence: "The student answered all questions ___ during the test."', options: ['A) correctly', 'B) everywhere', 'C) often', 'D) soon'], answer: 0, exp: '"Correctly" describes HOW questions were answered (manner).' },
+          { q: 'Which word in this sentence tells us how the cheetah ran: "The fast cheetah ran swiftly across the open plain."', options: ['A) fast', 'B) cheetah', 'C) swiftly', 'D) plain'], answer: 2, exp: '"Swiftly" is the adverb describing the verb "ran".' },
+          { q: 'What is the adverb of manner formed from the adjective "happy"?', options: ['A) happier', 'B) happily', 'C) happiness', 'D) happy'], answer: 1, exp: 'Change "y" to "i" and add "-ly": "happily".' },
+          { q: 'Choose the word that best completes the sentence: "She spoke ___ so she wouldn’t wake the sleeping baby."', options: ['A) softly', 'B) nearby', 'C) daily', 'D) late'], answer: 0, exp: '"Softly" tells us how she spoke.' },
+          { q: 'In the sentence "The choir sang loudly at the concert," which word is an adverb of manner?', options: ['A) choir', 'B) sang', 'C) loudly', 'D) concert'], answer: 2, exp: '"Loudly" describes how they sang.' },
+          { q: 'Which of these words describes how an action is done?', options: ['A) easily', 'B) inside', 'C) weekly', 'D) today'], answer: 0, exp: '"Easily" is an adverb of manner.' },
+          { q: 'Which option is NOT an adverb of manner?', options: ['A) bravely', 'B) rudely', 'C) always', 'D) greedily'], answer: 2, exp: '"Always" is an adverb of frequency, not manner.' },
+          { q: 'Complete the sentence: "The elderly man walked ___ down the icy sidewalk."', options: ['A) cautious', 'B) cautiously', 'C) caution', 'D) precautious'], answer: 1, exp: '"Cautiously" is the adverb modifying "walked".' },
+          { q: 'Identify the adverb of manner in the following list:', options: ['A) tomorrow', 'B) politely', 'C) downstairs', 'D) seldom'], answer: 1, exp: '"Politely" shows manner.' },
+          { q: 'What is the adverb of manner form of the adjective "good"?', options: ['A) goodly', 'B) better', 'C) best', 'D) well'], answer: 3, exp: '"Good" is an irregular adjective; its adverb form is "well".' },
+          { q: 'Choose the word that shows the manner of the verb: "The driver stopped the car ___ to avoid the dog."', options: ['A) suddenly', 'B) everywhere', 'C) monthly', 'D) yesterday'], answer: 0, exp: '"Suddenly" explains how the car was stopped.' },
+          { q: 'In the sentence "He solved the puzzle easily," what part of speech is "easily"?', options: ['A) noun', 'B) verb', 'C) adjective', 'D) adverb'], answer: 3, exp: '"Easily" modifies the verb "solved", so it is an adverb.' }
+        ]
+      },
+      {
+        id: 'correct-word',
+        title: 'Choose the Correct Word',
+        subtitle: 'Subject-Verb Agreement',
+        icon: 'fa-spell-check',
+        color: 'from-sky-400 to-indigo-500',
+        questions: [
+          { q: 'Happy frogs ___ high near the muddy pond.', options: ['A) leaps', 'B) leap', 'C) is', 'D) does'], answer: 1, exp: 'Plural subject "frogs" takes plural verb "leap".' },
+          { q: 'The tall chef ___ fresh bread every morning.', options: ['A) bakes', 'B) bake', 'C) are', 'D) do'], answer: 0, exp: 'Singular subject "chef" takes singular verb "bakes".' },
+          { q: 'Tiny ants ___ small crumbs back to their nest.', options: ['A) carries', 'B) is', 'C) carry', 'D) does'], answer: 2, exp: 'Plural subject "ants" takes "carry".' },
+          { q: 'My young sister ___ red boots on rainy days.', options: ['A) wear', 'B) are', 'C) do', 'D) wears'], answer: 3, exp: 'Singular "sister" takes "wears".' },
+          { q: 'Soft flakes ___ gently from the cold winter sky.', options: ['A) falls', 'B) fall', 'C) is', 'D) does'], answer: 1, exp: 'Plural "flakes" takes "fall".' },
+          { q: 'The brave firefighter ___ help to people in need.', options: ['A) bring', 'B) brings', 'C) are', 'D) do'], answer: 1, exp: 'Singular subject "firefighter" takes "brings".' },
+          { q: 'Smart owls ___ softly in the dark forest.', options: ['A) hoot', 'B) hoots', 'C) is', 'D) does'], answer: 0, exp: 'Plural subject "owls" takes "hoot".' },
+          { q: 'The sleepy cat ___ in the sunny window.', options: ['A) rest', 'B) are', 'C) rests', 'D) do'], answer: 2, exp: 'Singular subject "cat" takes "rests".' },
+          { q: 'Young calves ___ close to their big mothers.', options: ['A) walks', 'B) is', 'C) does', 'D) walk'], answer: 3, exp: 'Plural "calves" takes plural verb "walk".' },
+          { q: 'The fast runner ___ the finish line first.', options: ['A) crosses', 'B) cross', 'C) are', 'D) do'], answer: 0, exp: 'Singular "runner" takes "crosses".' },
+          { q: 'Clean rivers ___ through the deep green valley.', options: ['A) flows', 'B) flow', 'C) is', 'D) does'], answer: 1, exp: 'Plural subject "rivers" takes "flow".' },
+          { q: 'A busy painter ___ bright walls with a big brush.', options: ['A) paint', 'B) are', 'C) paints', 'D) do'], answer: 2, exp: 'Singular subject "painter" takes "paints".' },
+          { q: 'Wild deer ___ quietly through the tall trees.', options: ['A) moves', 'B) is', 'C) does', 'D) move'], answer: 3, exp: '"Deer" here refers to plural group in context, taking "move".' },
+          { q: 'The kind doctor ___ sick children at the clinic.', options: ['A) treats', 'B) treat', 'C) are', 'D) do'], answer: 0, exp: 'Singular "doctor" takes "treats".' }
+        ]
+      },
+      {
+        id: 'first-conditional',
+        title: 'First Conditional Quiz',
+        subtitle: 'If + Present, Will + Verb',
+        icon: 'fa-diagram-project',
+        color: 'from-violet-500 to-purple-700',
+        questions: [
+          { q: 'If you ___ eat your vegetables, you won’t get any dessert.', options: ['a) don’t', 'b) won’t', 'c) didn’t', 'd) aren’t'], answer: 0, exp: 'First conditional "if" clause uses present simple negative ("don\'t").' },
+          { q: 'Where ___ you stay if you visit Tokyo next spring?', options: ['a) did', 'b) do', 'c) will', 'd) would'], answer: 2, exp: 'Main question clause uses "will" + subject + verb.' },
+          { q: 'If the baker ___ fresh bread early, we will buy some for breakfast.', options: ['a) bake', 'b) bakes', 'c) will bake', 'd) baked'], answer: 1, exp: '"If" clause takes Present Simple ("bakes" for singular baker).' },
+          { q: 'Mark will be very disappointed if he ___ the concert tickets.', options: ['a) miss', 'b) misses', 'c) will miss', 'd) missed'], answer: 1, exp: '"If" clause takes Present Simple ("misses" for "he").' },
+          { q: 'If it ___ too hot this afternoon, we will stay indoors with the AC on.', options: ['a) gets', 'b) get', 'c) will get', 'd) got'], answer: 0, exp: 'Present simple singular for "it" is "gets".' },
+          { q: 'I won’t finish my report on time unless my colleagues ___ me.', options: ['a) help', 'b) helps', 'c) will help', 'd) helped'], answer: 0, exp: '"Unless" acts like "if not" and takes present simple ("help").' },
+          { q: 'If she ___ her driving test tomorrow, her parents will buy her a car.', options: ['a) pass', 'b) passes', 'c) will pass', 'd) passed'], answer: 1, exp: 'Present simple for "she" is "passes".' },
+          { q: 'Who ___ you call if your car breaks down on the highway?', options: ['a) do', 'b) did', 'c) will', 'd) would'], answer: 2, exp: 'Main clause question format uses "will".' },
+          { q: 'If the delivery ___ arrive by noon, we will have to reschedule the event.', options: ['a) don’t', 'b) doesn’t', 'c) won’t', 'd) didn’t'], answer: 1, exp: 'Present simple negative for singular "delivery" is "doesn\'t".' },
+          { q: 'You will feel much better tomorrow if you ___ a good night’s sleep tonight.', options: ['a) get', 'b) gets', 'c) will get', 'd) got'], answer: 0, exp: '"If" clause takes present simple with subject "you" -> "get".' }
+        ]
+      },
+      {
+        id: 'when-while',
+        title: 'When and While',
+        subtitle: 'Past Continuous & Simple',
+        icon: 'fa-hourglass-half',
+        color: 'from-orange-500 to-rose-600',
+        questions: [
+          { q: 'The power went out ___ the engineer was fixing the generator.', options: ['a) while', 'b) when', 'c) during', 'd) until'], answer: 0, exp: '"While" introduces the continuous background action ("was fixing").' },
+          { q: 'The chef dropped the plate when he ___ the hot oven door.', options: ['a) was touching', 'b) touched', 'c) touches', 'd) is touching'], answer: 1, exp: '"When" usually introduces a short completed past simple action ("touched").' },
+          { q: '___ the sun was setting, the sailors reached the harbor.', options: ['a) Since', 'b) Because', 'c) While', 'd) During'], answer: 2, exp: '"While" is used with past continuous "was setting".' },
+          { q: 'She was writing an email when her computer screen suddenly ___ black.', options: ['a) was turning', 'b) turns', 'c) is turning', 'd) turned'], answer: 3, exp: 'The interrupting short action uses Past Simple ("turned").' },
+          { q: 'The audience clapped loudly ___ the singer finished the high note.', options: ['a) while', 'b) when', 'c) during', 'd) whereas'], answer: 1, exp: '"When" indicates the completed point in time.' },
+          { q: 'They were cleaning the attic while the movers ___ the boxes downstairs.', options: ['a) carried', 'b) carry', 'c) were carrying', 'd) are carrying'], answer: 2, exp: 'Two simultaneous continuous actions both use past continuous.' },
+          { q: '___ I stepped off the train, my phone started ringing.', options: ['a) While', 'b) During', 'c) Whereas', 'd) When'], answer: 3, exp: '"When" is used for single point-in-time actions.' },
+          { q: 'The dog barked fiercely while the postman ___ near the gate.', options: ['a) was standing', 'b) stood', 'c) stands', 'd) is standing'], answer: 0, exp: '"While" connects with past continuous "was standing".' },
+          { q: 'What were you thinking about when the teacher ___ your name?', options: ['a) calls', 'b) called', 'c) was calling', 'd) is calling'], answer: 1, exp: 'Interrupting single action uses past simple ("called").' },
+          { q: 'The alarm went off ___ the security guard was walking past the display case.', options: ['a) during', 'b) when', 'c) while', 'd) until'], answer: 2, exp: '"While" fits the continuous action "was walking".' },
+          { q: 'The snow started to fall while the children ___ in the playground.', options: ['a) were playing', 'b) played', 'c) play', 'd) are playing'], answer: 0, exp: '"While" takes past continuous "were playing".' },
+          { q: 'She took a photo of the monument when the clouds ___ for a moment.', options: ['a) were clearing', 'b) clear', 'c) cleared', 'd) is clearing'], answer: 2, exp: 'Short completed action uses past simple "cleared".' }
+        ]
+      }
+    ];
+
+    // --- APPLICATION STATE ENGINE ---
+    class GrammarApp {
+      constructor() {
+        this.currentCat = null;
+        this.mode = 'practice'; // 'practice' or 'exam'
+        this.currentIndex = 0;
+        this.score = 0;
+        this.streak = 0;
+        this.userAnswers = [];
+        this.timer = null;
+        this.timeLeft = 0;
+        this.totalExamTime = 0;
+      }
+
+      toggleSound() {
+        soundFX.enabled = !soundFX.enabled;
+        const icon = document.getElementById('soundIcon');
+        const btn = document.getElementById('soundToggleBtn');
+        if (soundFX.enabled) {
+          icon.className = 'fa-solid fa-volume-high';
+          btn.classList.add('text-amber-300');
+          btn.classList.remove('text-slate-400');
+          soundFX.playClick();
+        } else {
+          icon.className = 'fa-solid fa-volume-xmark';
+          btn.classList.remove('text-amber-300');
+          btn.classList.add('text-slate-400');
+        }
+      }
+
+      goHome() {
+        soundFX.playClick();
+        if (this.timer) clearInterval(this.timer);
+        this.renderCategorySelection();
+      }
+
+      renderCategorySelection() {
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-2">Choose Your Grammar Challenge!</h2>
+            <p class="text-purple-200 text-sm md:text-base">Select a worksheet topic and play in Practice or Exam mode.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            ${quizCategories.map((cat, index) => `
+              <div class="glass-card-3d rounded-2xl p-5 flex flex-col justify-between cat-card border-t-2 border-white/20">
+                <div>
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r ${cat.color} flex items-center justify-center text-white text-xl shadow-md">
+                      <i class="fa-solid ${cat.icon}"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-bold text-lg text-white leading-tight">${cat.title}</h3>
+                      <span class="text-xs text-purple-300 font-medium">${cat.subtitle} • ${cat.questions.length} Questions</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex gap-2 mt-4 pt-3 border-t border-white/10">
+                  <button onclick="app.startQuiz('${cat.id}', 'practice')" class="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> Practice
+                  </button>
+                  <button onclick="app.startQuiz('${cat.id}', 'exam')" class="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-stopwatch"></i> Exam Mode
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      startQuiz(catId, mode) {
+        soundFX.playClick();
+        this.currentCat = quizCategories.find(c => c.id === catId);
+        this.mode = mode;
+        this.currentIndex = 0;
+        this.score = 0;
+        this.userAnswers = new Array(this.currentCat.questions.length).fill(null);
+
+        if (this.mode === 'exam') {
+          // 20 seconds per question for exam mode
+          this.timeLeft = this.currentCat.questions.length * 20;
+          this.totalExamTime = this.timeLeft;
+          this.startTimer();
+        }
+
+        this.renderQuestion();
+      }
+
+      startTimer() {
+        if (this.timer) clearInterval(this.timer);
+        this.timer = setInterval(() => {
+          this.timeLeft--;
+          const timerEl = document.getElementById('timerDisplay');
+          if (timerEl) {
+            const mins = Math.floor(this.timeLeft / 60);
+            const secs = this.timeLeft % 60;
+            timerEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            if (this.timeLeft <= 10) {
+              timerEl.classList.add('timer-warning');
+            }
+          }
+          if (this.timeLeft <= 0) {
+            clearInterval(this.timer);
+            this.finishQuiz();
+          }
+        }, 1000);
+      }
+
+      renderQuestion() {
+        const qData = this.currentCat.questions[this.currentIndex];
+        const total = this.currentCat.questions.length;
+        const progressPct = ((this.currentIndex + 1) / total) * 100;
+        const isExam = this.mode === 'exam';
+
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="glass-card-3d rounded-3xl p-6 md:p-8 max-w-3xl mx-auto w-full relative">
+            
+            <!-- Top Quiz Header Status -->
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-6 pb-4 border-b border-white/10">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-violet-500/30 border border-violet-400/40 text-violet-200 text-xs font-bold uppercase tracking-wider">
+                  ${this.currentCat.title}
+                </span>
+                <span class="px-3 py-1 rounded-full ${isExam ? 'bg-amber-500/30 border-amber-400/40 text-amber-200' : 'bg-emerald-500/30 border-emerald-400/40 text-emerald-200'} border text-xs font-bold uppercase tracking-wider">
+                  ${isExam ? 'Exam Mode' : 'Practice Mode'}
+                </span>
+              </div>
+
+              ${isExam ? `
+                <div class="flex items-center gap-2 font-mono text-lg font-bold text-amber-300 bg-black/30 px-3.5 py-1.5 rounded-xl border border-amber-500/30">
+                  <i class="fa-solid fa-clock text-amber-400"></i>
+                  <span id="timerDisplay">${Math.floor(this.timeLeft / 60)}:${(this.timeLeft % 60) < 10 ? '0' : ''}${this.timeLeft % 60}</span>
+                </div>
+              ` : ''}
+
+              <div class="text-sm font-bold text-slate-300">
+                Question <span class="text-amber-300 text-base">${this.currentIndex + 1}</span> / ${total}
+              </div>
+            </div>
+
+            <!-- Animated Progress Bar -->
+            <div class="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden mb-6 p-0.5 border border-white/10">
+              <div class="h-full bg-gradient-to-r from-amber-400 via-fuchsia-500 to-cyan-400 rounded-full transition-all duration-300" style="width: ${progressPct}%"></div>
+            </div>
+
+            <!-- Question Card Text -->
+            <div class="my-6">
+              <h2 class="text-xl md:text-2xl font-bold text-white leading-relaxed tracking-wide">
+                ${qData.q}
+              </h2>
+            </div>
+
+            <!-- Options Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-6">
+              ${qData.options.map((opt, idx) => {
+                let btnStyle = "bg-white/10 hover:bg-violet-600/30 border-white/15 text-white";
+                let iconMarkup = "";
+                const userAns = this.userAnswers[this.currentIndex];
+
+                if (userAns !== null) {
+                  if (idx === qData.answer) {
+                    btnStyle = "bg-emerald-600/80 border-emerald-400 text-white font-bold glow-green";
+                    iconMarkup = '<i class="fa-solid fa-circle-check text-emerald-200 text-lg"></i>';
+                  } else if (userAns === idx) {
+                    btnStyle = "bg-rose-600/80 border-rose-400 text-white font-bold";
+                    iconMarkup = '<i class="fa-solid fa-circle-xmark text-rose-200 text-lg"></i>';
+                  } else {
+                    btnStyle = "bg-white/5 border-white/5 text-slate-400 opacity-60";
+                  }
+                }
+
+                return `
+                  <button 
+                    onclick="app.selectAnswer(${idx})" 
+                    ${userAns !== null ? 'disabled' : ''} 
+                    class="option-btn p-4 rounded-2xl border text-left font-semibold text-base md:text-lg flex justify-between items-center ${btnStyle}">
+                    <span>${opt}</span>
+                    ${iconMarkup}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Explanation Banner (Practice Mode Immediate Feedback) -->
+            ${(!isExam && this.userAnswers[this.currentIndex] !== null) ? `
+              <div class="mt-6 p-4 rounded-2xl bg-gradient-to-r ${this.userAnswers[this.currentIndex] === qData.answer ? 'from-emerald-950/80 to-teal-900/80 border-emerald-500/50' : 'from-rose-950/80 to-pink-900/80 border-rose-500/50'} border text-purple-100 animate-fade-in">
+                <div class="flex items-center gap-2 mb-1.5 font-bold ${this.userAnswers[this.currentIndex] === qData.answer ? 'text-emerald-300' : 'text-rose-300'}">
+                  <i class="fa-solid ${this.userAnswers[this.currentIndex] === qData.answer ? 'fa-circle-check' : 'fa-circle-info'}"></i>
+                  <span>${this.userAnswers[this.currentIndex] === qData.answer ? 'Great Job! Correct!' : 'Not Quite! Here is why:'}</span>
+                </div>
+                <p class="text-sm md:text-base leading-relaxed text-slate-200">${qData.exp}</p>
+              </div>
+            ` : ''}
+
+            <!-- Bottom Navigation Bar -->
+            <div class="flex justify-between items-center mt-8 pt-4 border-t border-white/10">
+              <button 
+                onclick="app.prevQuestion()" 
+                ${this.currentIndex === 0 ? 'disabled class="opacity-40 cursor-not-allowed px-4 py-2 rounded-xl bg-white/5 text-slate-400 text-sm font-bold"' : 'class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all"'}>
+                <i class="fa-solid fa-arrow-left mr-2"></i> Previous
+              </button>
+
+              ${this.userAnswers[this.currentIndex] !== null || isExam ? `
+                <button 
+                  onclick="app.nextQuestion()" 
+                  class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold text-sm shadow-lg transition-all flex items-center gap-2">
+                  <span>${this.currentIndex === total - 1 ? 'Finish Quiz' : 'Next Question'}</span>
+                  <i class="fa-solid ${this.currentIndex === total - 1 ? 'fa-flag-checkered' : 'fa-arrow-right'}"></i>
+                </button>
+              ` : `
+                <span class="text-xs text-purple-300 italic">Select an option to proceed</span>
+              `}
+            </div>
+
+          </div>
+        `;
+      }
+
+      selectAnswer(idx) {
+        if (this.userAnswers[this.currentIndex] !== null) return;
+
+        this.userAnswers[this.currentIndex] = idx;
+        const qData = this.currentCat.questions[this.currentIndex];
+
+        if (idx === qData.answer) {
+          this.score++;
+          this.streak++;
+          soundFX.playCorrect();
+        } else {
+          this.streak = 0;
+          soundFX.playWrong();
+        }
+
+        document.getElementById('streakDisplay').textContent = this.streak;
+        this.renderQuestion();
+      }
+
+      nextQuestion() {
+        soundFX.playClick();
+        if (this.currentIndex < this.currentCat.questions.length - 1) {
+          this.currentIndex++;
+          this.renderQuestion();
+        } else {
+          this.finishQuiz();
+        }
+      }
+
+      prevQuestion() {
+        soundFX.playClick();
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          this.renderQuestion();
+        }
+      }
+
+      finishQuiz() {
+        if (this.timer) clearInterval(this.timer);
+        const total = this.currentCat.questions.length;
+        
+        // Calculate final score for Exam mode where questions might have been skipped
+        let correctCount = 0;
+        this.userAnswers.forEach((ans, index) => {
+          if (ans === this.currentCat.questions[index].answer) {
+            correctCount++;
+          }
+        });
+        this.score = correctCount;
+
+        const percentage = Math.round((this.score / total) * 100);
+
+        // Confetti trigger on full or high score
+        if (percentage >= 80 && typeof confetti === 'function') {
+          confetti({
+            particleCount: 120,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="glass-card-3d rounded-3xl p-6 md:p-8 max-w-4xl mx-auto w-full my-4">
+            
+            <!-- Result Summary Header -->
+            <div class="text-center mb-8">
+              <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr ${percentage >= 70 ? 'from-emerald-400 to-teal-500 glow-green' : 'from-amber-400 to-orange-500 glow-orange'} text-white text-4xl mb-4 shadow-xl">
+                <i class="fa-solid ${percentage >= 70 ? 'fa-trophy' : 'fa-star'}"></i>
+              </div>
+              <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-2">
+                ${percentage === 100 ? 'Awesome! Perfect Score! 🎉' : percentage >= 70 ? 'Great Job! Well Done! 🌟' : 'Good Effort! Keep Practicing! 💪'}
+              </h2>
+              <p class="text-purple-200 text-sm md:text-base">
+                You completed the <span class="font-bold text-amber-300">${this.currentCat.title}</span> quiz in <span class="font-bold uppercase text-amber-300">${this.mode} Mode</span>.
+              </p>
+            </div>
+
+            <!-- Score Stats Box -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <div class="text-xs uppercase text-purple-300 font-bold tracking-wider mb-1">Score</div>
+                <div class="text-3xl font-extrabold text-amber-300">${this.score} / ${total}</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <div class="text-xs uppercase text-purple-300 font-bold tracking-wider mb-1">Accuracy</div>
+                <div class="text-3xl font-extrabold ${percentage >= 70 ? 'text-emerald-400' : 'text-orange-400'}">${percentage}%</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <div class="text-xs uppercase text-purple-300 font-bold tracking-wider mb-1">Streak Record</div>
+                <div class="text-3xl font-extrabold text-fuchsia-400">${this.streak} 🔥</div>
+              </div>
+            </div>
+
+            <!-- Detailed Answer Review & Explanations Breakdown -->
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-amber-400"></i> Review Answers & Explanations
+            </h3>
+
+            <div class="space-y-4 max-h-96 overflow-y-auto pr-2 mb-8">
+              ${this.currentCat.questions.map((q, idx) => {
+                const uAns = this.userAnswers[idx];
+                const isCorrect = uAns === q.answer;
+
+                return `
+                  <div class="p-4 rounded-2xl ${isCorrect ? 'bg-emerald-950/40 border-emerald-500/30' : 'bg-rose-950/40 border-rose-500/30'} border text-left">
+                    <div class="flex items-start gap-3">
+                      <div class="mt-0.5 text-lg ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">
+                        <i class="fa-solid ${isCorrect ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                      </div>
+                      <div class="flex-1">
+                        <p class="font-bold text-white text-base mb-2">${idx + 1}. ${q.q}</p>
+                        
+                        <div class="text-xs md:text-sm grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                          <div class="${isCorrect ? 'text-emerald-300' : 'text-rose-300'} font-semibold">
+                            Your Choice: ${uAns !== null ? q.options[uAns] : 'Not Answered'}
+                          </div>
+                          ${!isCorrect ? `
+                            <div class="text-emerald-300 font-semibold">
+                              Correct Choice: ${q.options[q.answer]}
+                            </div>
+                          ` : ''}
+                        </div>
+
+                        <div class="text-xs text-purple-200/90 bg-black/20 p-2.5 rounded-xl border border-white/5">
+                          <span class="font-bold text-amber-300">Explanation:</span> ${q.exp}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-4 justify-center">
+              <button 
+                onclick="app.startQuiz('${this.currentCat.id}', '${this.mode}')" 
+                class="px-6 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-extrabold text-sm shadow-lg transition-all flex items-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> Retake Quiz
+              </button>
+              <button 
+                onclick="app.goHome()" 
+                class="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-sm transition-all flex items-center gap-2">
+                <i class="fa-solid fa-house"></i> Main Menu
+              </button>
+            </div>
+
+          </div>
+        `;
+      }
+    }
+
+    // Initialize Web App on Window Load
+    let app;
+    window.onload = () => {
+      app = new GrammarApp();
+      app.renderCategorySelection();
+    };
+  </script>
+</body>
+</html>
+```
